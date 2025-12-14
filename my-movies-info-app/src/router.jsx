@@ -14,5 +14,6 @@ export const router = createBrowserRouter([
       },
       // Sau này thêm path: "movie/:id", element: <MovieDetail />
     ],
+    // Có thể thêm các route con khác ở đây
   },
 ]);
