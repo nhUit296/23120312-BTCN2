@@ -3,7 +3,7 @@
 const Header = () => {
   return (
     // Màu nền #ebdcdb (hồng phấn) và chữ #5c4040 (nâu đất) theo ảnh mẫu
-    <header className="w-full h-16 bg-[#ebdcdb] flex items-center justify-between px-6 shadow-sm border-b border-gray-200">
+    <header className="w-full h-16 bg-[#ebdcdb] flex items-center justify-between px-6 shadow-sm border-b border-gray-200 border-radius-md">
       {/* 1. BÊN TRÁI: Mã số sinh viên */}
       <div className="text-[#5c4040] font-medium text-sm">23120312</div>
 
