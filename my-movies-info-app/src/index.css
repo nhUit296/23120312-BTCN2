@@ -43,3 +43,26 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+
+:root {
+  /* Chế độ Sáng (Giữ nguyên màu hồng nhạt của bạn) */
+  --header-bg: #ebdcdb;
+  --header-text: #5c4040;
+  --switch-active: #2563eb; /* Màu xanh dương cho nút switch */
+}
+
+/* Chế độ Tối (Cập nhật theo Screenshot) */
+.dark {
+  /* Màu đỏ nâu đậm cho Header */
+  --header-bg: #281010; 
+  /* Màu chữ trắng hơi hồng nhạt */
+  --header-text: #D28F85;
+  /* Màu border tối */
+  --header-border: #521c1c; 
+
+  --nav-bg: #09142E;
+  --nav-border: #223358;
+  --nav-icon: #ffffff;
+  --nav-bginput: #202328;
+
+}

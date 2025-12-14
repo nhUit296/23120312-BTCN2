@@ -3,10 +3,10 @@
 const NavBar = () => {
   return (
     // Container chính: Màu nền xanh nhạt (#e6efff), căn giữa 2 bên, có viền dưới nhẹ
-    <nav className="w-full h-14 bg-[#e6efff] flex items-center justify-between px-6 border-b border-blue-100 rounded-[5px]">
+    <nav className="w-full h-14 bg-[#e6efff] flex items-center justify-between px-6 border-b border-blue-100 rounded-[5px] dark:bg-[var(--nav-bg)] dark:border-[var(--nav-border)] transition-colors duration-300">
       {/* 1. BÊN TRÁI: Icon Ngôi nhà (Home) */}
       {/* Dùng thẻ div hoặc button tĩnh để hiển thị UI */}
-      <div className="p-2 hover:bg-blue-200 rounded-full transition-colors cursor-pointer text-gray-700">
+      <div className="p-2 hover:bg-blue-200 rounded-full transition-colors cursor-pointer text-gray-700 dark:text-[var(--nav-icon)] dark:hover:bg-blue-800">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -24,11 +24,11 @@ const NavBar = () => {
         <input
           type="text"
           placeholder="Search"
-          className="px-3 py-1.5 rounded-[10px] border border-gray-300 focus:outline-none focus:border-blue-400 text-sm w-64 bg-white h-10"
+          className="dark:bg-[var(--nav-bginput)] dark:border-[var(--nav-border)] px-3 py-1.5 rounded-[10px] border border-gray-300 focus:outline-none focus:border-blue-400 text-sm w-64 bg-white h-10"
         />
 
         {/* Nút Button Search */}
-        <button className="bg-blue-200 hover:bg-blue-300 text-blue-800 font-medium px-4 py-1.5 text-sm transition-colors border border-gray-300 h-10 rounded-[10px]">
+        <button className="dark:text-gray-300 dark:bg-[var(--nav-bg)] bg-blue-200 hover:bg-blue-300 text-blue-800 font-medium px-4 py-1.5 text-sm transition-colors border border-gray-300 h-10 rounded-[10px]">
           Search
         </button>
       </div>
