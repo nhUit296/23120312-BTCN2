@@ -12,7 +12,7 @@ const MovieBanner = ({ movies }) => {
   if (!movies || movies.length === 0) return null;
 
   return (
-    <div className="w-full bg-white py-8">
+    <div className="w-full bg-white py-8 dark:bg-[var(--app-bg)]">
       <Carousel
         opts={{
           loop: true, // Cho phép bấm next liên tục vòng tròn

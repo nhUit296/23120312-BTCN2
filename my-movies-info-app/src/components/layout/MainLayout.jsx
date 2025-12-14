@@ -7,7 +7,7 @@ import Footer from "./Footer";
 const MainLayout = () => {
   return (
     // Copy y nguyên giao diện từ App.jsx sang đây
-    <div className="max-w-[1200px] min-h-screen bg-white font-sans text-gray-900 flex flex-col gap-2 p-4 mx-auto">
+    <div className="dark:bg-[var(--app-bg)] max-w-[1200px] min-h-screen bg-white font-sans text-gray-900 flex flex-col gap-2 p-2 mx-auto">
       {/* Header luôn hiển thị */}
       <Header />
 

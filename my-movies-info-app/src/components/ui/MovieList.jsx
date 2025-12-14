@@ -22,7 +22,7 @@ const MovieList = ({ title, movies }) => {
       {/* Container cho tiêu đề, có padding ít hơn để nằm lệch trái ra ngoài */}
 
       <div className="px-8 max-w-[1600px] mx-auto mb-4">
-        <h2 className="text-2xl font-bold text-gray-800 uppercase tracking-wide">
+        <h2 className="text-2xl font-bold text-gray-800 uppercase tracking-wide dark:text-gray-200">
           {title}
         </h2>
       </div>
