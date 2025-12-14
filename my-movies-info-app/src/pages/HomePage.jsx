@@ -88,18 +88,13 @@ const HomePage = () => {
       <MovieBanner movies={TEST_MOVIES} />
 
       {/* 2. Danh sách Most Popular (Dùng component MovieList) */}
-      <MovieList
-        title="Most Popular"
-        movies={MANY_MOVIES}
-        accentColor="border-blue-500" // Màu vạch kẻ xanh
-      />
+      <MovieList title="Most Popular" movies={MANY_MOVIES} />
 
       {/* 3. Danh sách Top Rating */}
-      {/* <MovieList
+      <MovieList
         title="Top Rating"
         movies={[...MANY_MOVIES].reverse()} // Đảo ngược cho khác bọt
-        accentColor="border-yellow-500" // Màu vạch kẻ vàng
-      /> */}
+      />
     </div>
   );
 };
