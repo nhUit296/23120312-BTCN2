@@ -46,7 +46,7 @@ const MovieBanner = ({ movies }) => {
                 </div>
 
                 {/* Thanh ở dưới để hiển thị tiến trình chuyển slide */}
-                {/* <div className="absolute bottom-1 left-0 right-0 flex justify-center gap-0.75 z-20 pb-1">
+                <div className="absolute bottom-1 left-0 right-0 flex justify-center gap-0.75 z-20 pb-1">
                   {movies.slice(0, 5).map((_, index) => {
                     // Xác định vị trí của phim hiện tại để highlight thanh tương ứng
                     const currentIndex = movies
@@ -62,7 +62,7 @@ const MovieBanner = ({ movies }) => {
                       />
                     );
                   })}
-                </div> */}
+                </div>
               </div>
             </CarouselItem>
           ))}
