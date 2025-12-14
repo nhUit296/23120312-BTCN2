@@ -14,7 +14,7 @@ const MovieCard = ({ movie }) => {
     <div className="relative group w-[340px] h-[200px] overflow-hidden cursor-pointer flex-shrink-0 transition-transform hover:scale-105 duration-300 rounded-[5px]">
       {/* 1. Ảnh Poster */}
       <img
-        src={getPosterURL(movie.poster_path || movie.image)}
+        src={getPosterURL(movie.image)}
         alt={movie.title}
         className="w-full h-full object-cover"
       />
@@ -27,16 +27,12 @@ const MovieCard = ({ movie }) => {
         </h3>
 
         {/* Năm phát hành */}
-        <p className="text-gray-300 text-xs mb-2">
-          {movie.release_date || movie.year || "Unknown Year"}
-        </p>
+        <p className="text-gray-300 text-xs mb-2">{movie.year}</p>
 
         {/* Rating */}
         <div className="flex items-center gap-1 mb-3">
           <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-          <span className="text-white text-sm font-bold">
-            {movie.vote_average || movie.rate || 0}
-          </span>
+          <span className="text-white text-sm font-bold">{movie.rate}</span>
         </div>
 
         {/* Nút Xem chi tiết */}

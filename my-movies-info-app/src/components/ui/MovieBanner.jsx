@@ -30,25 +30,48 @@ const MovieBanner = ({ movies }) => {
               {/* Poster Dọc - Nhỏ gọn */}
               <div className="relative w-[300px] h-[450px] rounded-[5px] shadow-2xl overflow-hidden group select-none">
                 <img
-                  src={movie.poster_path || movie.image}
+                  src={movie.image}
                   alt={movie.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
 
-                {/* Tên phim */}
-                <div className="absolute bottom-0 left-0 w-full py-4 px-2 bg-gradient-to-t from-black/90 via-black/60 to-transparent text-center">
-                  <h3 className="text-yellow-400 font-bold text-lg drop-shadow-md uppercase tracking-wider">
+                {/* Tên phim và thể loại*/}
+                <div className="absolute bottom-2 left-0 w-full py-4 px-2 bg-gradient-to-t from-black/90 via-black/60 to-transparent text-center">
+                  <h3 className="text-yellow-400 font-bold text-[15px] drop-shadow-md uppercase tracking-wider">
                     {movie.title}
                   </h3>
+                  <h3 className="text-yellow-400 font-bold text-[10px] drop-shadow-md uppercase tracking-wider mt-2">
+                    [ {movie.genres.join(", ")} ]
+                  </h3>
                 </div>
+
+                {/* Thanh ở dưới để hiển thị tiến trình chuyển slide */}
+                {/* <div className="absolute bottom-1 left-0 right-0 flex justify-center gap-0.75 z-20 pb-1">
+                  {movies.slice(0, 5).map((_, index) => {
+                    // Xác định vị trí của phim hiện tại để highlight thanh tương ứng
+                    const currentIndex = movies
+                      .slice(0, 5)
+                      .findIndex((m) => m.id === movie.id);
+                    const isActive = currentIndex === index;
+                    return (
+                      <div
+                        key={index}
+                        className={`h-0.5 transition-all duration-300 ${
+                          isActive ? "w-10 bg-white" : "w-10 bg-white/30"
+                        }`}
+                      />
+                    );
+                  })}
+                </div> */}
               </div>
             </CarouselItem>
           ))}
         </CarouselContent>
 
         {/* Nút điều hướng ở 2 bên mép màn hình */}
-        <CarouselPrevious className="absolute left-4 md:left-10 h-12 w-12 bg-gray-100 hover:bg-white border-gray-300 text-gray-800 shadow-md z-20" />
-        <CarouselNext className="absolute right-4 md:right-10 h-12 w-12 bg-gray-100 hover:bg-white border-gray-300 text-gray-800 shadow-md z-20" />
+        <CarouselPrevious className="absolute left-20 top-1/2 -translate-y-1/2 h-auto w-auto p-0 bg-transparent border-none shadow-none hover:bg-transparent text-gray-600 hover:text-gray-900 transition-colors z-10 size-2" />
+
+        <CarouselNext className="absolute right-20 top-1/2 -translate-y-1/2 h-auto w-auto p-0 bg-transparent border-none shadow-none hover:bg-transparent text-gray-600 hover:text-gray-900 transition-colors z-10" />
       </Carousel>
     </div>
   );
