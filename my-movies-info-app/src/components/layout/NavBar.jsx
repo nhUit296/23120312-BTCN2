@@ -3,7 +3,7 @@
 const NavBar = () => {
   return (
     // Container chính: Màu nền xanh nhạt (#e6efff), căn giữa 2 bên, có viền dưới nhẹ
-    <nav className="w-full h-14 bg-[#e6efff] flex items-center justify-between px-6 shadow-sm border-b border-blue-100">
+    <nav className="w-full h-14 bg-[#e6efff] flex items-center justify-between px-6 border-b border-blue-100 rounded-[5px]">
       {/* 1. BÊN TRÁI: Icon Ngôi nhà (Home) */}
       {/* Dùng thẻ div hoặc button tĩnh để hiển thị UI */}
       <div className="p-2 hover:bg-blue-200 rounded-full transition-colors cursor-pointer text-gray-700">
@@ -24,11 +24,11 @@ const NavBar = () => {
         <input
           type="text"
           placeholder="Search"
-          className="px-3 py-1.5 rounded-md border border-gray-300 focus:outline-none focus:border-blue-400 text-sm w-64 bg-white"
+          className="px-3 py-1.5 rounded-[10px] border border-gray-300 focus:outline-none focus:border-blue-400 text-sm w-64 bg-white h-10"
         />
 
         {/* Nút Button Search */}
-        <button className="bg-blue-200 hover:bg-blue-300 text-blue-800 font-medium px-4 py-1.5 rounded-md text-sm transition-colors border border-blue-300">
+        <button className="bg-blue-200 hover:bg-blue-300 text-blue-800 font-medium px-4 py-1.5 text-sm transition-colors border border-gray-300 h-10 rounded-[10px]">
           Search
         </button>
       </div>
