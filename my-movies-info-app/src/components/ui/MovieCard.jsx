@@ -11,7 +11,7 @@ const getPosterURL = (path) => {
 
 const MovieCard = ({ movie }) => {
   return (
-    <div className="relative group w-[200px] h-[300px] overflow-hidden cursor-pointer flex-shrink-0 transition-transform hover:scale-105 duration-300 rounded-[10px]">
+    <div className="relative group w-[340px] h-[200px] overflow-hidden cursor-pointer flex-shrink-0 transition-transform hover:scale-105 duration-300 rounded-[5px]">
       {/* 1. Ảnh Poster */}
       <img
         src={getPosterURL(movie.poster_path || movie.image)}
