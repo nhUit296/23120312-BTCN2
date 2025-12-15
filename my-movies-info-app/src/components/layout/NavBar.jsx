@@ -24,7 +24,7 @@ const NavBar = () => {
         <input
           type="text"
           placeholder="Search"
-          className="dark:bg-[var(--nav-bginput)] dark:border-[var(--nav-border)] px-3 py-1.5 rounded-[10px] border border-gray-300 focus:outline-none focus:border-blue-400 text-sm w-64 bg-white h-10"
+          className="dark:placeholder-gray-400 dark:bg-[var(--nav-bginput)] dark:border-[var(--nav-border)] px-3 py-1.5 rounded-[10px] border border-gray-300 focus:outline-none focus:border-blue-400 text-sm w-64 bg-white h-10"
         />
 
         {/* Nút Button Search */}
