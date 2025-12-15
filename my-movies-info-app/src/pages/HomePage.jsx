@@ -89,34 +89,45 @@ import { useState, useEffect } from "react"; // <--- SỬA LẠI DÒNG NÀY (B�
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Thêm state error để debug
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
         setLoading(true);
-        const data = await movieApi.getMostPopular(1, 20);
+
+        // --- KỸ THUẬT GỌI NHIỀU TRANG CÙNG LÚC (Promise.all) ---
+        // Chúng ta gọi 3 trang: 1, 2, 3 để lấy khoảng 36 phim (12 * 3)
+        const [res1, res2, res3] = await Promise.all([
+          movieApi.getMostPopular(1, 12), // Page 1
+          movieApi.getMostPopular(2, 12), // Page 2
+          movieApi.getMostPopular(3, 12), // Page 3
+        ]);
+
+        // Kiểm tra log xem dữ liệu về đủ 3 trang chưa
+        console.log("Page 1:", res1);
+        console.log("Page 2:", res2);
+        console.log("Page 3:", res3);
+
+        // --- GỘP DỮ LIỆU ---
+        // Lấy mảng phim từ key .data của từng response và nối lại
+        // Dùng toán tử spread (...) để trải mảng ra
+        const allMovies = [
+            ...(res1.data || []), 
+            ...(res2.data || []), 
+            ...(res3.data || [])
+        ];
+
+        console.log("Tổng hợp phim:", allMovies.length, "phim"); // Sẽ in ra khoảng 36
         
-        // --- THÊM DÒNG NÀY ĐỂ KIỂM TRA DỮ LIỆU ---
-        console.log("DỮ LIỆU API TRẢ VỀ:", data); 
-        // -----------------------------------------
+        // Loại bỏ phim trùng lặp (nếu có - tùy chọn, nhưng nên làm cho chắc)
+        const uniqueMovies = Array.from(new Set(allMovies.map(a => a.id)))
+            .map(id => {
+                return allMovies.find(a => a.id === id)
+            });
 
-        // Logic cũ của bạn có thể đang sai ở đây nếu cấu trúc data khác dự đoán
-        // Thử kiểm tra kỹ các trường hợp phổ biến:
-        let movieList = [];
-        if (Array.isArray(data)) {
-            movieList = data;
-        } else if (data.results) {
-            movieList = data.results;
-        } else if (data.data) { // Một số API bọc trong .data
-            movieList = data.data;
-        } else if (data.movies) {
-            movieList = data.movies;
-        }
+        setMovies(uniqueMovies);
 
-        console.log("Danh sách phim sau khi xử lý:", movieList); // Log thêm cái này
-
-        setMovies(movieList);
       } catch (err) {
         console.error("Lỗi:", err);
         setError(err.message);
@@ -127,13 +138,6 @@ const HomePage = () => {
 
     fetchHomeData();
   }, []);
-  if (loading) return <div className="text-white p-10 text-center">Đang tải phim...</div>;
-  if (error) return <div className="text-red-500 p-10 text-center">Lỗi: {error}</div>;
-
-  // Nếu không có phim thì cũng không hiện lỗi trắng trang
-  if (!movies || movies.length === 0) {
-      return <div className="text-white p-10 text-center">Không tìm thấy phim nào.</div>;
-  }
 
   // Phân chia dữ liệu
   const bannerMovies = movies.slice(0, 5);
