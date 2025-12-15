@@ -11,9 +11,13 @@ import {
   ChevronLeft,
   ChevronRight,
   User,
+  Heart,
 } from "lucide-react";
 
 const MovieDetailPage = () => {
+  // --- STATE CHO FAVORITE ---
+  const [isFavorite, setIsFavorite] = useState(false);
+
   const { id } = useParams();
 
   // State cho thông tin phim
@@ -30,6 +34,34 @@ const MovieDetailPage = () => {
   const ACTORS_PER_PAGE = 6; // Hiển thị 6 diễn viên mỗi trang
 
   const [loading, setLoading] = useState(true);
+
+  // 1. Kiểm tra xem phim này đã có trong LocalStorage chưa
+  useEffect(() => {
+    if (movie) {
+      const savedMovies = JSON.parse(localStorage.getItem("favorites")) || [];
+      const exists = savedMovies.some((m) => m.id === movie.id);
+      setIsFavorite(exists);
+    }
+  }, [movie]);
+
+  // 2. Hàm xử lý khi bấm nút Tim
+  const toggleFavorite = () => {
+    const savedMovies = JSON.parse(localStorage.getItem("favorites")) || [];
+
+    if (isFavorite) {
+      // Nếu đang thích -> Xóa
+      const newList = savedMovies.filter((m) => m.id !== movie.id);
+      localStorage.setItem("favorites", JSON.stringify(newList));
+      setIsFavorite(false);
+      alert("Removed from Favorites");
+    } else {
+      // Nếu chưa thích -> Thêm
+      savedMovies.push(movie);
+      localStorage.setItem("favorites", JSON.stringify(savedMovies));
+      setIsFavorite(true);
+      alert("Added to Favorites");
+    }
+  };
 
   // 1. Gọi API lấy chi tiết phim
   useEffect(() => {
@@ -162,6 +194,26 @@ const MovieDetailPage = () => {
                   ))}
                 </div>
               </div>
+            </div>
+
+            {/* Tìm đến đoạn chứa nút "Watch Movie" và thêm nút Favorite vào bên cạnh */}
+            <div className="flex gap-4 pt-4">
+              <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full font-bold transition-transform hover:scale-105 shadow-lg shadow-red-900/20">
+                Watch Movie
+              </button>
+
+              {/* --- NÚT ADD LIST FAVORITE --- */}
+              <button
+                onClick={toggleFavorite}
+                className={`px-6 py-3 rounded-full font-semibold transition-colors border flex items-center gap-2 ${
+                  isFavorite
+                    ? "bg-pink-600 border-pink-600 text-white hover:bg-pink-700" // Style khi đã thích
+                    : "bg-gray-800 border-gray-600 text-white hover:bg-gray-700" // Style khi chưa thích
+                }`}
+              >
+                <Heart className={isFavorite ? "fill-current" : ""} size={20} />
+                {isFavorite ? "Favorited" : "Add List Favorite"}
+              </button>
             </div>
           </div>
         </div>
