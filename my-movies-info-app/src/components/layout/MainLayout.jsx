@@ -3,6 +3,8 @@ import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
+import Loading from "../ui/Loading"; // 2. Import Loading vừa tạo
+import { Suspense } from "react"; // 1. Import Suspense từ React
 
 const MainLayout = () => {
   return (
@@ -16,7 +18,9 @@ const MainLayout = () => {
 
       {/* Phần thay đổi nội dung (Pages con sẽ hiện ở đây) */}
       <main className="flex-1">
-        <Outlet />
+        <Suspense fallback={<Loading />}>
+          <Outlet />
+        </Suspense>
       </main>
 
       {/* Footer luôn hiển thị */}
