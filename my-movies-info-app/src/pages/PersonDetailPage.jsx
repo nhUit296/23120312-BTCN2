@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom"; // Thêm Link để bấm vào phim chuyển trang
 import { movieApi } from "../api/movieApi";
 import MovieSearchCard from "../components/ui/MovieSearchCard";
 import {
@@ -16,9 +16,9 @@ const PersonDetailPage = () => {
   const [person, setPerson] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // --- STATE PHÂN TRANG (Client-side) ---
+  // --- STATE PHÂN TRANG CHO DANH SÁCH PHIM ---
   const [currentPage, setCurrentPage] = useState(1);
-  const MOVIES_PER_PAGE = 10; // Hiển thị 10 phim mỗi trang
+  const MOVIES_PER_PAGE = 5; // Hiển thị 5 phim mỗi trang (như bạn yêu cầu)
 
   useEffect(() => {
     const fetchPerson = async () => {
@@ -59,6 +59,8 @@ const PersonDetailPage = () => {
   // Data
   const name = person.name || "Unknown";
   const bio = person.summary || "No biography available.";
+
+  // Lấy toàn bộ danh sách phim
   const allMovies = Array.isArray(person.known_for) ? person.known_for : [];
 
   // --- LOGIC CẮT MẢNG ĐỂ PHÂN TRANG ---
@@ -70,7 +72,7 @@ const PersonDetailPage = () => {
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
-    // Cuộn nhẹ lên đầu danh sách phim
+    // Cuộn nhẹ lên đầu danh sách phim để người dùng dễ theo dõi
     const element = document.getElementById("known-for");
     if (element) element.scrollIntoView({ behavior: "smooth" });
   };
@@ -126,23 +128,55 @@ const PersonDetailPage = () => {
 
         {/* --- LIST PHIM (KNOWN FOR) --- */}
         <div id="known-for">
-          <h2 className="text-3xl font-bold mb-8 flex items-center gap-3 border-l-4 border-yellow-500 pl-4">
-            Known For{" "}
-            <span className="text-gray-500 text-xl font-normal">
-              ({allMovies.length} Movies)
-            </span>
-          </h2>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold flex items-center gap-3 border-l-4 border-yellow-500 pl-4">
+              Known For{" "}
+              <span className="text-gray-500 text-xl font-normal">
+                ({allMovies.length} Movies)
+              </span>
+            </h2>
+
+            {/* Pagination Controls (Nằm góc phải trên cùng cho tiện) */}
+            {totalPages > 1 && (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 disabled:opacity-30 transition-colors"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <span className="text-sm font-medium text-gray-400">
+                  {currentPage}/{totalPages}
+                </span>
+                <button
+                  onClick={() =>
+                    handlePageChange(Math.min(totalPages, currentPage + 1))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 disabled:opacity-30 transition-colors"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            )}
+          </div>
 
           {currentMovies.length > 0 ? (
             <>
-              {/* Grid View */}
+              {/* Grid View: Hiển thị 5 phim/hàng trên màn hình lớn */}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                 {currentMovies.map((movie) => (
-                  <div key={movie.id} className="relative group">
-                    {/* Card Phim */}
+                  // Bọc thẻ Link để khi bấm vào phim thì chuyển sang trang chi tiết phim đó
+                  <Link
+                    to={`/movie/${movie.id}`}
+                    key={movie.id}
+                    className="relative group block"
+                  >
+                    {/* Card Phim (Tái sử dụng) */}
                     <MovieSearchCard movie={movie} />
 
-                    {/* Vai diễn */}
+                    {/* Vai diễn (Overlay bên dưới) */}
                     {(movie.character || movie.role) && (
                       <div className="mt-2 text-xs text-center text-gray-400">
                         as{" "}
@@ -151,11 +185,11 @@ const PersonDetailPage = () => {
                         </span>
                       </div>
                     )}
-                  </div>
+                  </Link>
                 ))}
               </div>
 
-              {/* Pagination Controls */}
+              {/* Pagination Controls (Dưới cùng - Cho dễ bấm sau khi xem hết list) */}
               {totalPages > 1 && (
                 <div className="flex justify-center items-center gap-4 mt-12">
                   <button
