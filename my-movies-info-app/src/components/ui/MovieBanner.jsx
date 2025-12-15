@@ -7,8 +7,17 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Fade from "embla-carousel-fade"; // <--- 1. Import Plugin Fade
+import { useNavigate } from "react-router-dom";
 
 const MovieBanner = ({ movies }) => {
+  const navigate = useNavigate(); // 2. Khởi tạo
+
+  // 3. Hàm xử lý click
+  const handleClick = (movie) => {
+    // Chuyển hướng đến trang chi tiết kèm ID phim
+    navigate(`/movie/${movie.id}`);
+  };
+
   if (!movies || movies.length === 0) return null;
 
   return (
@@ -26,6 +35,7 @@ const MovieBanner = ({ movies }) => {
             <CarouselItem
               key={movie.id}
               className="flex justify-center items-center"
+              onClick={() => handleClick(movie)}
             >
               {/* Poster Dọc - Nhỏ gọn */}
               <div className="relative w-[300px] h-[450px] rounded-[5px] shadow-2xl overflow-hidden group select-none">

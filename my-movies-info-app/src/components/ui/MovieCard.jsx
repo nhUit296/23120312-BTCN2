@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { PlayCircle } from "lucide-react";
 
 const getPosterURL = (path) => {
@@ -16,9 +17,20 @@ const MovieCard = ({ movie }) => {
     "N/A";
   const imagePath = movie.poster_path || movie.image;
 
+  const navigate = useNavigate(); // 2. Khởi tạo
+
+  // 3. Hàm xử lý click
+  const handleClick = () => {
+    // Chuyển hướng đến trang chi tiết kèm ID phim
+    navigate(`/movie/${movie.id}`);
+  };
+
   return (
     // DIV GIỮ CHỖ - Giữ vị trí trong layout, không bao giờ thay đổi
-    <div className="relative group z-[1] group-hover:z-[100]">
+    <div
+      className="relative group z-[1] group-hover:z-[100]"
+      onClick={handleClick}
+    >
       {/* CONTAINER ẢNH + INFO
           KEY POINT: Dùng left-1/2 -translate-x-1/2 để căn giữa theo chiều ngang
           - Trước hover: relative, kích thước 200x300

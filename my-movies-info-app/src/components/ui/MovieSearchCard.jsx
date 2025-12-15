@@ -1,8 +1,15 @@
 // src/components/ui/MovieSearchCard.jsx
 import React from "react";
 import { Star, Calendar, Layers } from "lucide-react"; // Đổi icon Clock thành Layers (Thể loại)
+import { useNavigate } from "react-router-dom"; // 1. Import hook
 
 const MovieSearchCard = ({ movie }) => {
+  const navigate = useNavigate(); // 2. Khởi tạo
+  const handleClick = () => {
+    // Chuyển hướng đến trang chi tiết kèm ID phim
+    navigate(`/movie/${movie.id}`);
+  };
+
   const title = movie.title || "Unknown Title";
   const year =
     movie.year ||
@@ -25,7 +32,10 @@ const MovieSearchCard = ({ movie }) => {
   };
 
   return (
-    <div className="bg-[#1a1a1a] overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer border border-[#D9D9D9] rounded-[5px]">
+    <div
+      className="bg-[#1a1a1a] overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer border border-[#D9D9D9] rounded-[5px]"
+      onClick={handleClick}
+    >
       {/* 1. POSTER */}
       <div className="relative aspect-[2/3] overflow-hidden">
         <img
