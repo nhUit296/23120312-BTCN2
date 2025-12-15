@@ -2,6 +2,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy } from "react"; // 1. Import lazy
 import MainLayout from "./components/layout/MainLayout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Thêm import
 const LoginPage = lazy(() => import("./pages/LoginPage"));
@@ -38,7 +39,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "favorites",
-        element: <FavoritePage />,
+        element: (
+          <ProtectedRoute>
+            <FavoritePage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
