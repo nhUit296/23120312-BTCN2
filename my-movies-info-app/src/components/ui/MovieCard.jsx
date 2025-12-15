@@ -1,47 +1,48 @@
-// src/components/ui/MovieCard.jsx
-import { Star } from "lucide-react"; // Dùng icon ngôi sao có sẵn
+import React from "react";
+import { PlayCircle } from "lucide-react";
 
-// Hàm xử lý ảnh (đề phòng API trả về link thiếu domain)
 const getPosterURL = (path) => {
-  if (!path) return "https://via.placeholder.com/300x450?text=No+Image";
+  if (!path) return "https://via.placeholder.com/340x500?text=No+Image";
   return path.startsWith("http")
     ? path
     : `https://image.tmdb.org/t/p/w500${path}`;
 };
 
 const MovieCard = ({ movie }) => {
+  const title = movie.title || movie.original_title || "Unknown Title";
+  const year =
+    movie.year ||
+    (movie.release_date && movie.release_date.split("-")[0]) ||
+    "N/A";
+  const imagePath = movie.poster_path || movie.image;
+
   return (
-    <div className="relative group w-[340px] h-[200px] overflow-hidden cursor-pointer flex-shrink-0 transition-transform hover:scale-105 duration-300 rounded-[5px]">
-      {/* 1. Ảnh Poster */}
-      <img
-        src={getPosterURL(movie.image)}
-        alt={movie.title}
-        className="w-full h-full object-cover"
-      />
-
-      {/* 2. Lớp phủ đen mờ (Chỉ hiện khi Hover) */}
-      <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-end">
-        {/* Tên phim */}
-        <h3 className="text-white font-bold text-lg leading-tight mb-1">
-          {movie.title}
-        </h3>
-
-        {/* Năm phát hành */}
-        <p className="text-gray-300 text-xs mb-2">{movie.year}</p>
-
-        {/* Rating */}
-        <div className="flex items-center gap-1 mb-3">
-          <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-          <span className="text-white text-sm font-bold">{movie.rate}</span>
+    // DIV GIỮ CHỖ - Giữ vị trí trong layout, không bao giờ thay đổi
+    <div className="relative group z-[1] group-hover:z-[100]">
+      {/* CONTAINER ẢNH + INFO
+          KEY POINT: Dùng left-1/2 -translate-x-1/2 để căn giữa theo chiều ngang
+          - Trước hover: relative, kích thước 200x300
+          - Sau hover: absolute (nổi lên), kích thước 250x375, dịch lên trên
+      */}
+      <div className="relative w-[300px] h-[250px] transition-all duration-300 ease-in-out group-hover:absolute group-hover:left-1/2 group-hover:top-[-120px] group-hover:-translate-x-1/2 group-hover:-translate-y-6 group-hover:w-[450px] group-hover:h-[350px] group-hover:z-50 rounded-[5px]">
+        {/* PHẦN ẢNH */}
+        <div className="w-full h-full rounded-[5px] shadow-lg bg-[#181818] group-hover:rounded-b-none group-hover:shadow-2xl">
+          <img
+            src={getPosterURL(imagePath)}
+            alt={title}
+            className="w-full h-full object-cover"
+          />
         </div>
 
-        {/* Nút Xem chi tiết */}
-        <button className="w-full py-2 bg-red-600 text-white text-sm font-bold rounded-md hover:bg-red-700">
-          Xem Ngay
-        </button>
+        {/* PHẦN THÔNG TIN - Xuất hiện dưới ảnh khi hover */}
+        <div className="absolute top-full left-0 w-full bg-[#181818] p-4 rounded-b-lg shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+          {/* Tên phim */}
+          <h3 className="text-white text-base font-bold line-clamp-2 mb-2">
+            {title} ({year})
+          </h3>
+        </div>
       </div>
     </div>
   );
 };
-
 export default MovieCard;

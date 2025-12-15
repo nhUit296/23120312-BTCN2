@@ -57,7 +57,9 @@ const MovieBanner = ({ movies }) => {
                       <div
                         key={index}
                         className={`h-0.5 transition-all duration-300 ${
-                          isActive ? "w-10 bg-white" : "w-10 bg-white/30"
+                          isActive
+                            ? "w-10 bg-white dark:bg-[#181818]"
+                            : "w-10 bg-white/30"
                         }`}
                       />
                     );

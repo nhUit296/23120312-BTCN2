@@ -31,12 +31,12 @@ const MovieList = ({ title, movies }) => {
 
       {/* Container cho slider, có padding nhiều hơn (px-16) để thụt vào trong */}
 
-      <div className="px-16 max-w-[1600px] mx-auto relative group">
+      <div className="px-16 max-w-[1280px] mx-auto relative">
         <Carousel
           opts={{ align: "start", loop: true, slidesToScroll: "auto" }}
           className="w-full"
         >
-          <CarouselContent className="-ml-4 pb-4">
+          <CarouselContent className="-ml-4 pb-6 overflow-visible pt-6">
             {movies.map((movie, index) => (
               // Hiển thị 3 ảnh mỗi lần
 
@@ -55,9 +55,9 @@ const MovieList = ({ title, movies }) => {
 
           {/* Không chỉnh được kích thước ">" và "<" là do className này 
             Được thêm vào hàm cn để tùy chỉnh kích thước của nguyên nút button, chứ k phải của riêng icon */}
-          <CarouselPrevious className="absolute top-1/2 p-0 -translate-y-1/2 bg-transparent border-none shadow-none hover:bg-transparent text-gray-600 hover:text-gray-900 transition-colors z-10" />
+          <CarouselPrevious className="absolute top-1/2 p-0 -translate-y-1/2 bg-transparent border-none shadow-none hover:bg-transparent text-gray-600 hover:text-gray-900 transition-colors z-[90]" />
 
-          <CarouselNext className="absolute -right-15 top-1/2 -translate-y-1/2 p-0 bg-transparent border-none shadow-none hover:bg-transparent text-gray-600 hover:text-gray-900 transition-colors z-10" />
+          <CarouselNext className="absolute -right-15 top-1/2 -translate-y-1/2 p-0 bg-transparent border-none shadow-none hover:bg-transparent text-gray-600 hover:text-gray-900 transition-colors z-[90]" />
         </Carousel>
       </div>
     </section>
