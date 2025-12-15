@@ -12,7 +12,7 @@ export const authApi = {
   login: (credentials) => {
     // Body: { username, password }
     // LƯU Ý: Hãy kiểm tra lại Swagger của bạn để chắc chắn endpoint là /auth/login hay /users/login
-    return fetchClient.post("/auth/login", credentials);
+    return fetchClient.post("/users/login", credentials);
   },
 
   // Lấy thông tin user hiện tại (Profile)

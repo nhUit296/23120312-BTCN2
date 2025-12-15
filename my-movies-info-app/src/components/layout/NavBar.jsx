@@ -13,15 +13,14 @@ const NavBar = () => {
       // Chuyển hướng sang trang search kèm query param
       navigate(`/search?title=${encodeURIComponent(keyword)}`);
       // (Tùy chọn) Xóa ô input sau khi search xong
-      // setKeyword(""); 
+      // setKeyword("");
     }
   };
 
   return (
     <nav className="w-full h-14 bg-[#e6efff] flex items-center justify-between px-6 border-b border-blue-100 rounded-[5px] dark:bg-[var(--nav-bg)] dark:border-[var(--nav-border)] transition-colors duration-300">
-      
       {/* 1. BÊN TRÁI: Icon Home (Sửa lỗi cú pháp) */}
-      <div 
+      <div
         onClick={() => navigate("/")}
         className="p-2 hover:bg-blue-200 rounded-full transition-colors cursor-pointer text-gray-700 dark:text-[var(--nav-icon)] dark:hover:bg-blue-800"
       >
@@ -31,7 +30,6 @@ const NavBar = () => {
 
       {/* 2. BÊN PHẢI: Form Search */}
       <form className="flex items-center gap-2" onSubmit={handleSearch}>
-        
         {/* SỬA: Thêm value và onChange để bắt dữ liệu nhập vào */}
         <input
           type="text"
@@ -41,7 +39,7 @@ const NavBar = () => {
           className="dark:placeholder-gray-400 dark:bg-[var(--nav-bginput)] dark:border-[var(--nav-border)] dark:text-white px-3 py-1.5 rounded-[10px] border border-gray-300 focus:outline-none focus:border-blue-400 text-sm w-64 bg-white h-10"
         />
 
-        <button 
+        <button
           type="submit" // Thêm type submit cho rõ ràng
           className="dark:text-gray-300 dark:bg-[var(--nav-bg)] bg-blue-200 hover:bg-blue-300 text-blue-800 font-medium px-4 py-1.5 text-sm transition-colors border border-gray-300 h-10 rounded-[10px]"
         >
