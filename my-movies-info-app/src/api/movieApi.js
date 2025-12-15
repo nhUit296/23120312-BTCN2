@@ -38,4 +38,12 @@ export const movieApi = {
   getPersonDetail: (id) => {
     return fetchClient.get(`/persons/${id}`);
   },
+
+  // --- THÊM HÀM NÀY ---
+  // Lấy reviews có phân trang: /movies/{id}/reviews?page=1&limit=5
+  getMovieReviews: (movieId, page = 1, limit = 5) => {
+    return fetchClient.get(
+      `/movies/${movieId}/reviews?page=${page}&limit=${limit}`
+    );
+  },
 };
