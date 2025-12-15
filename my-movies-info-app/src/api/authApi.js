@@ -15,8 +15,16 @@ export const authApi = {
     return fetchClient.post("/users/login", credentials);
   },
 
-  // Lấy thông tin user hiện tại (Profile)
-  getMe: () => {
-    return fetchClient.get("/users/me"); // Hoặc /auth/me tùy API
+  // 3. Lấy thông tin user hiện tại (GET)
+  // Endpoint: /users/profile (Dựa trên ảnh Swagger bạn gửi)
+  getProfile: () => {
+    return fetchClient.get("/users/profile");
+  },
+
+  // 4. Cập nhật thông tin user (PATCH)
+  // Endpoint: /users/profile
+  // Body: { email, phone, dob }
+  updateProfile: (data) => {
+    return fetchClient.patch("/users/profile", data);
   },
 };

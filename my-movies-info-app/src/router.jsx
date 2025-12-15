@@ -15,6 +15,7 @@ const SearchPage = lazy(() => import("./pages/SearchPage"));
 const MovieDetailPage = lazy(() => import("./pages/MovieDetailPage"));
 const PersonDetailPage = lazy(() => import("./pages/PersonDetailPage"));
 const FavoritePage = lazy(() => import("./pages/FavoritePage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +43,15 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <FavoritePage />
+          </ProtectedRoute>
+        ),
+      },
+      // ... các route khác
+      {
+        path: "profile",
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         ),
       },

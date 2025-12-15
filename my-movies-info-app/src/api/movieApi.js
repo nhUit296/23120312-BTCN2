@@ -46,4 +46,6 @@ export const movieApi = {
       `/movies/${movieId}/reviews?page=${page}&limit=${limit}`
     );
   },
+
+  
 };
