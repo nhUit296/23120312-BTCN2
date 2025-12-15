@@ -3,6 +3,10 @@ import { createBrowserRouter } from "react-router-dom";
 import { lazy } from "react"; // 1. Import lazy
 import MainLayout from "./components/layout/MainLayout";
 
+// Thêm import
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+
 // 2. Thay thế các import thường bằng lazy import
 // import HomePage from "./pages/HomePage";  <-- XÓA CÁCH CŨ
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -32,5 +36,13 @@ export const router = createBrowserRouter([
         element: <PersonDetailPage />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
   },
 ]);
