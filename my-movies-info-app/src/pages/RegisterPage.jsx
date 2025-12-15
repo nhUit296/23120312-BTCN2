@@ -1,4 +1,3 @@
-// src/pages/RegisterPage.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { authApi } from "../api/authApi";
@@ -10,28 +9,89 @@ const RegisterPage = () => {
     email: "",
     password: "",
     phone: "",
-    dob: "", // Date of birth (YYYY-MM-DD)
+    dob: "",
   });
-  const [error, setError] = useState(null);
+
+  // 1. State lưu lỗi
+  const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // 2. Hàm Validation thủ công
+  const validateForm = () => {
+    let newErrors = {};
+    let isValid = true;
+
+    // Validate Username
+    if (!formData.username.trim()) {
+      newErrors.username = "Username is required";
+      isValid = false;
+    } else if (formData.username.length < 3) {
+      newErrors.username = "Username must be at least 3 characters";
+      isValid = false;
+    }
+
+    // Validate Email (Regex cơ bản)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+      isValid = false;
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+      isValid = false;
+    }
+
+    // Validate Password
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+      isValid = false;
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+      isValid = false;
+    }
+
+    // Validate Phone (Phải là số, 10 ký tự)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (formData.phone && !phoneRegex.test(formData.phone)) {
+      newErrors.phone = "Phone number must be 10 digits";
+      isValid = false;
+    }
+
+    // Validate DOB
+    if (!formData.dob) {
+      newErrors.dob = "Date of birth is required";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Xóa lỗi của trường đó khi người dùng bắt đầu gõ lại
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: "" });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
+    setApiError(null);
 
+    // 3. Gọi hàm validate trước khi gửi API
+    if (!validateForm()) {
+      return; // Dừng lại nếu có lỗi
+    }
+
+    setLoading(true);
     try {
-      // Gọi API đăng ký
       await authApi.register(formData);
       alert("Registration successful! Please login.");
-      navigate("/login"); // Chuyển sang trang đăng nhập
+      navigate("/login");
     } catch (err) {
       console.error(err);
-      setError(err.message || "Registration failed");
+      setApiError(err.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -44,68 +104,108 @@ const RegisterPage = () => {
           Create Account
         </h2>
 
-        {error && (
-          <div className="bg-red-500/20 text-red-400 p-3 rounded mb-4 text-sm">
-            {error}
+        {/* Hiển thị lỗi từ API (nếu có) */}
+        {apiError && (
+          <div className="bg-red-500/20 text-red-400 p-3 rounded mb-4 text-sm border border-red-500/50">
+            {apiError}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Username */}
           <div>
-            <label className="block text-gray-400 text-sm mb-1">Username</label>
+            <label className="block text-gray-400 text-sm mb-1">
+              Username <span className="text-red-500">*</span>
+            </label>
             <input
               name="username"
-              required
+              value={formData.username}
               onChange={handleChange}
-              className="w-full bg-[#2a2a2a] border border-gray-700 text-white rounded p-2 focus:border-blue-500 outline-none"
+              className={`w-full bg-[#2a2a2a] border ${
+                errors.username ? "border-red-500" : "border-gray-700"
+              } text-white rounded p-2 focus:outline-none focus:border-blue-500 transition-colors`}
             />
+            {errors.username && (
+              <p className="text-red-500 text-xs mt-1">{errors.username}</p>
+            )}
           </div>
+
+          {/* Email */}
           <div>
-            <label className="block text-gray-400 text-sm mb-1">Email</label>
+            <label className="block text-gray-400 text-sm mb-1">
+              Email <span className="text-red-500">*</span>
+            </label>
             <input
-              type="email"
               name="email"
-              required
+              value={formData.email}
               onChange={handleChange}
-              className="w-full bg-[#2a2a2a] border border-gray-700 text-white rounded p-2 focus:border-blue-500 outline-none"
+              className={`w-full bg-[#2a2a2a] border ${
+                errors.email ? "border-red-500" : "border-gray-700"
+              } text-white rounded p-2 focus:outline-none focus:border-blue-500 transition-colors`}
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+            )}
           </div>
+
+          {/* Password */}
           <div>
-            <label className="block text-gray-400 text-sm mb-1">Password</label>
+            <label className="block text-gray-400 text-sm mb-1">
+              Password <span className="text-red-500">*</span>
+            </label>
             <input
               type="password"
               name="password"
-              required
+              value={formData.password}
               onChange={handleChange}
-              className="w-full bg-[#2a2a2a] border border-gray-700 text-white rounded p-2 focus:border-blue-500 outline-none"
+              className={`w-full bg-[#2a2a2a] border ${
+                errors.password ? "border-red-500" : "border-gray-700"
+              } text-white rounded p-2 focus:outline-none focus:border-blue-500 transition-colors`}
             />
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+            )}
           </div>
+
           <div className="grid grid-cols-2 gap-4">
+            {/* Phone */}
             <div>
               <label className="block text-gray-400 text-sm mb-1">Phone</label>
               <input
                 name="phone"
+                value={formData.phone}
                 onChange={handleChange}
-                className="w-full bg-[#2a2a2a] border border-gray-700 text-white rounded p-2 focus:border-blue-500 outline-none"
+                className={`w-full bg-[#2a2a2a] border ${
+                  errors.phone ? "border-red-500" : "border-gray-700"
+                } text-white rounded p-2 focus:outline-none focus:border-blue-500 transition-colors`}
               />
+              {errors.phone && (
+                <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+              )}
             </div>
+            {/* DOB */}
             <div>
               <label className="block text-gray-400 text-sm mb-1">
-                Date of Birth
+                Date of Birth <span className="text-red-500">*</span>
               </label>
               <input
                 type="date"
                 name="dob"
-                required
+                value={formData.dob}
                 onChange={handleChange}
-                className="w-full bg-[#2a2a2a] border border-gray-700 text-white rounded p-2 focus:border-blue-500 outline-none"
+                className={`w-full bg-[#2a2a2a] border ${
+                  errors.dob ? "border-red-500" : "border-gray-700"
+                } text-white rounded p-2 focus:outline-none focus:border-blue-500 transition-colors`}
               />
+              {errors.dob && (
+                <p className="text-red-500 text-xs mt-1">{errors.dob}</p>
+              )}
             </div>
           </div>
 
           <button
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded transition-colors mt-4"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded transition-colors mt-4 disabled:opacity-50"
           >
             {loading ? "Processing..." : "Sign Up"}
           </button>

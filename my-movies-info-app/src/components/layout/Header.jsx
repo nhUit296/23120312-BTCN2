@@ -72,7 +72,7 @@ const Header = () => {
 
               {/* Menu Popup */}
               {showMenu && (
-                <div className="absolute right-0 mt-3 w-56 bg-white dark:bg-[#1e1e1e] rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                <div className="absolute right-0 mt-3 w-56 bg-white dark:bg-[#1e1e1e] shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right rounded-[5px]">
                   {/* Header của Popup */}
                   <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#252525]">
                     <p className="text-sm font-bold text-gray-800 dark:text-white truncate">
