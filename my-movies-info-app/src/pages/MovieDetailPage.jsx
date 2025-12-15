@@ -1,8 +1,16 @@
 // src/pages/MovieDetailPage.jsx
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom"; // Thêm Link
 import { movieApi } from "../api/movieApi";
-import { Star, Clock, User, Award, Film } from "lucide-react";
+import {
+  Star,
+  Clock,
+  User,
+  Award,
+  Film,
+  MessageSquare,
+  AlertTriangle,
+} from "lucide-react"; // Thêm icon
 
 const MovieDetailPage = () => {
   const { id } = useParams();
@@ -14,8 +22,6 @@ const MovieDetailPage = () => {
       try {
         setLoading(true);
         const response = await movieApi.getMovieDetail(id);
-
-        // Kiểm tra dữ liệu trả về (tùy vào wrapper của bạn trả về data hay response)
         const data = response.data || response;
         setMovie(data);
       } catch (error) {
@@ -41,9 +47,7 @@ const MovieDetailPage = () => {
       </div>
     );
 
-  // --- 1. XỬ LÝ DỮ LIỆU TỪ JSON MỚI ---
-
-  // Xử lý ảnh (Poster/Backdrop)
+  // --- XỬ LÝ DỮ LIỆU ---
   const getImgUrl = (path) => {
     if (!path || path === "string")
       return "https://via.placeholder.com/500x750?text=No+Image";
@@ -54,45 +58,35 @@ const MovieDetailPage = () => {
 
   const backdropUrl = getImgUrl(movie.image);
   const posterUrl = getImgUrl(movie.image);
-
-  // Xử lý thông tin cơ bản
   const title = movie.title || movie.full_title || "Unknown Title";
   const year = movie.year || "N/A";
   const rating = movie.rate || 0;
-  const runtime = movie.runtime || "N/A"; // JSON trả về chuỗi "68 mins"
+  const runtime = movie.runtime || "N/A";
   const description =
     movie.plot_full || movie.short_description || "No description available.";
   const awards = movie.awards || "N/A";
-
-  // Xử lý mảng Genres (JSON: ["Comedy"])
   const genres = Array.isArray(movie.genres)
     ? movie.genres.join(", ")
     : movie.genres;
 
-  // Xử lý Đạo diễn (JSON: directors là mảng object)
-  const directors = Array.isArray(movie.directors)
-    ? movie.directors.map((d) => d.name).join(", ")
-    : "Unknown";
-
-  // Xử lý Diễn viên (JSON: actors là mảng object)
+  const directors = Array.isArray(movie.directors) ? movie.directors : [];
   const actors = Array.isArray(movie.actors) ? movie.actors : [];
+
+  // --- MỚI: XỬ LÝ REVIEWS ---
+  // JSON: reviews là mảng [{id, username, rate, title, content, warning_spoilers}, ...]
+  const reviews = Array.isArray(movie.reviews) ? movie.reviews : [];
 
   return (
     <div className="min-h-screen bg-[#121212] text-white pb-20">
-      {/* --- PHẦN 1: HERO SECTION --- */}
+      {/* HERO SECTION (Giữ nguyên) */}
       <div className="relative w-full">
-        {/* Ảnh nền mờ (Backdrop giả lập từ poster vì JSON không có backdrop riêng) */}
         <div
           className="w-full h-[500px] bg-cover bg-center opacity-30 absolute top-0 left-0 blur-sm"
           style={{ backgroundImage: `url(${backdropUrl})` }}
         ></div>
-
-        {/* Lớp gradient đè lên */}
         <div className="w-full h-[500px] absolute top-0 left-0 bg-gradient-to-t from-[#121212] via-[#121212]/80 to-transparent"></div>
 
-        {/* Nội dung chính Hero */}
         <div className="relative max-w-7xl mx-auto px-6 pt-32 pb-10 flex flex-col md:flex-row gap-8 items-start">
-          {/* Poster Ảnh Dọc */}
           <div className="hidden md:block w-[300px] flex-shrink-0 rounded-lg shadow-2xl overflow-hidden border-2 border-gray-700">
             <img
               src={posterUrl}
@@ -101,7 +95,6 @@ const MovieDetailPage = () => {
             />
           </div>
 
-          {/* Thông tin Text */}
           <div className="flex-1 space-y-5">
             <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight">
               {title}{" "}
@@ -110,7 +103,6 @@ const MovieDetailPage = () => {
               </span>
             </h1>
 
-            {/* Meta Info */}
             <div className="flex flex-wrap items-center gap-4 text-sm md:text-base text-gray-300">
               <span className="bg-gray-800 border border-gray-600 px-2 py-1 rounded text-white">
                 {genres}
@@ -120,7 +112,6 @@ const MovieDetailPage = () => {
               </span>
             </div>
 
-            {/* Rating & Director */}
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
                 <Star className="w-8 h-8 text-yellow-500 fill-yellow-500" />
@@ -129,19 +120,19 @@ const MovieDetailPage = () => {
                 </span>
                 <span className="text-xs text-gray-500">/10</span>
               </div>
-              {/* Giả sử movie.directors là mảng object [{id, name}, ...] */}
+
               <div className="border-l border-gray-600 pl-6">
                 <p className="text-gray-400 text-sm">Director</p>
                 <div className="font-semibold text-white text-lg flex flex-wrap gap-2">
-                  {Array.isArray(movie.directors)
-                    ? movie.directors.map((d, index) => (
+                  {directors.length > 0
+                    ? directors.map((d, index) => (
                         <Link
                           key={d.id || index}
                           to={`/person/${d.id}`}
-                          className="hover:text-yellow-500 transition-colors cursor-pointer"
+                          className="hover:text-yellow-500 transition-colors"
                         >
                           {d.name}
-                          {index < movie.directors.length - 1 ? ", " : ""}
+                          {index < directors.length - 1 ? ", " : ""}
                         </Link>
                       ))
                     : "Unknown"}
@@ -149,64 +140,133 @@ const MovieDetailPage = () => {
               </div>
             </div>
 
-            {/* Buttons */}
             <div className="flex gap-4 pt-4">
-              <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full font-bold transition-transform hover:scale-105 shadow-lg shadow-red-900/20">
+              <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full font-bold transition-transform hover:scale-105 shadow-lg">
                 Watch Movie
-              </button>
-              <button className="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-full font-semibold transition-colors border border-gray-600">
-                Add to List
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* --- PHẦN 2: CHI TIẾT & DIỄN VIÊN --- */}
+      {/* CHI TIẾT & REVIEWS */}
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 mt-8">
-        {/* CỘT TRÁI (LỚN): Story & Cast */}
-        <div className="md:col-span-2 space-y-10">
-          {/* Storyline */}
+        {/* CỘT TRÁI (LỚN) */}
+        <div className="md:col-span-2 space-y-12">
+          {/* 1. Storyline */}
           <section>
-            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-white">
               <Film className="text-yellow-500" /> Storyline
             </h2>
             <p className="text-gray-300 text-lg leading-relaxed">
               {description}
             </p>
           </section>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {actors.map((actor) => (
-              // Bọc toàn bộ thẻ diễn viên bằng Link để click vào đâu cũng được
-              <Link
-                to={`/person/${actor.id}`}
-                key={actor.id}
-                className="flex items-center gap-4 bg-[#1e1e1e] p-3 rounded-lg hover:bg-[#252525] transition-colors group cursor-pointer"
-              >
-                <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-700 flex-shrink-0 border border-gray-600 group-hover:border-yellow-500 transition-colors">
-                  <img
-                    src={getImgUrl(actor.image)}
-                    alt={actor.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
 
-                <div>
-                  <p className="font-bold text-white text-base group-hover:text-yellow-500 transition-colors">
-                    {actor.name}
-                  </p>
-                  <p className="text-sm text-gray-400">
-                    {actor.character || actor.role}
+          {/* 2. Top Cast */}
+          <section>
+            <h2 className="text-2xl font-bold mb-6 text-white">Top Cast</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {actors.map((actor) => (
+                <Link
+                  to={`/person/${actor.id}`}
+                  key={actor.id}
+                  className="flex items-center gap-4 bg-[#1e1e1e] p-3 rounded-lg hover:bg-[#252525] transition-colors group cursor-pointer border border-transparent hover:border-gray-700"
+                >
+                  <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-700 flex-shrink-0 border border-gray-600 group-hover:border-yellow-500 transition-colors">
+                    <img
+                      src={getImgUrl(actor.image)}
+                      alt={actor.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-bold text-white text-base group-hover:text-yellow-500 transition-colors">
+                      {actor.name}
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      {actor.character || actor.role || "Actor"}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+              {actors.length === 0 && (
+                <p className="text-gray-500 italic">
+                  No cast information available.
+                </p>
+              )}
+            </div>
+          </section>
+
+          {/* --- 3. REVIEWS SECTION (MỚI THÊM) --- */}
+          <section>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 border-t border-gray-800 pt-8">
+              <MessageSquare className="text-blue-500" /> User Reviews{" "}
+              <span className="text-gray-500 text-lg font-normal">
+                ({reviews.length})
+              </span>
+            </h2>
+
+            <div className="space-y-6">
+              {reviews.length > 0 ? (
+                reviews.map((review) => (
+                  <div
+                    key={review.id}
+                    className="bg-[#1e1e1e] p-5 rounded-xl border border-gray-800 hover:border-gray-600 transition-colors"
+                  >
+                    {/* Header Review: User + Rate + Date */}
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-400 font-bold border border-blue-800">
+                          {review.username
+                            ? review.username.charAt(0).toUpperCase()
+                            : "U"}
+                        </div>
+                        <div>
+                          <p className="font-bold text-white text-sm">
+                            {review.username || "Anonymous"}
+                          </p>
+                          <div className="flex items-center gap-1 text-yellow-500 text-xs">
+                            <Star className="w-3 h-3 fill-current" />
+                            <span>{review.rate}/10</span>
+                          </div>
+                        </div>
+                      </div>
+                      {/* Badge Spoilers nếu có */}
+                      {review.warning_spoilers && (
+                        <span className="flex items-center gap-1 text-xs text-red-400 bg-red-900/20 px-2 py-1 rounded border border-red-900/50">
+                          <AlertTriangle className="w-3 h-3" /> Spoiler
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Title Review */}
+                    {review.title && (
+                      <h4 className="font-bold text-gray-200 mb-2">
+                        "{review.title}"
+                      </h4>
+                    )}
+
+                    {/* Content */}
+                    <p className="text-gray-400 text-sm leading-relaxed whitespace-pre-line">
+                      {review.content}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 bg-[#1e1e1e] rounded-lg border border-gray-800 border-dashed">
+                  <p className="text-gray-500 italic">
+                    No reviews yet. Be the first to review!
                   </p>
                 </div>
-              </Link>
-            ))}
-          </div>
+              )}
+            </div>
+          </section>
         </div>
 
-        {/* CỘT PHẢI (NHỎ): Thông tin bổ sung */}
+        {/* CỘT PHẢI (NHỎ): Info */}
         <div className="space-y-6">
-          <div className="bg-[#1e1e1e] p-6 rounded-xl border border-gray-800">
+          <div className="bg-[#1e1e1e] p-6 rounded-xl border border-gray-800 sticky top-24">
             <h3 className="font-bold mb-4 text-gray-400 uppercase text-sm tracking-wider">
               Movie Info
             </h3>
@@ -222,7 +282,10 @@ const MovieDetailPage = () => {
                 <span className="text-gray-500">Year</span>
                 <span className="text-white font-medium">{year}</span>
               </li>
-              {/* Bạn có thể thêm Box Office nếu JSON trả về dữ liệu cụ thể */}
+              <li className="flex justify-between border-b border-gray-800 pb-3">
+                <span className="text-gray-500">Status</span>
+                <span className="text-green-400 font-medium">Released</span>
+              </li>
             </ul>
           </div>
         </div>

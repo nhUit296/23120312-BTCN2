@@ -27,7 +27,10 @@ const MovieCard = ({ movie }) => {
 
   return (
     // DIV GIỮ CHỖ - Giữ vị trí trong layout, không bao giờ thay đổi
-    <div className="relative group w-[300px] h-[250px]" onClick={handleClick}>
+    <div
+      className="relative group w-[300px] h-[250px] rounded-[5px]"
+      onClick={handleClick}
+    >
       {/* CONTAINER ẢNH + INFO
           KEY POINT: Dùng left-1/2 -translate-x-1/2 để căn giữa theo chiều ngang
           - Trước hover: relative, kích thước 200x300
