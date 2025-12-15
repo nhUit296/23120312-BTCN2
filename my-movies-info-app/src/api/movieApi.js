@@ -13,4 +13,12 @@ export const movieApi = {
   getTopRated: (page = 1, limit = 12) => {
     return fetchClient.get(`/movies/top-rated?category=IMDB_TOP_50&page=${page}&limit=${limit}`);
   },
+
+  // --- THÊM HÀM SEARCH ---
+  // API: /movies/search?title=...&page=...&limit=...
+  searchMovies: (keyword, page = 1) => {
+    // Dùng encodeURIComponent để xử lý ký tự đặc biệt hoặc tiếng Việt trong tên phim
+    const encodedTitle = encodeURIComponent(keyword);
+    return fetchClient.get(`/movies/search?title=${encodedTitle}&page=${page}&limit=12`);
+  },
 };

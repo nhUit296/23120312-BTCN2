@@ -169,7 +169,7 @@ const HomePage = () => {
         <MovieList title="Most Popular" movies={popularListData} />
 
         {/* TopRating sử dụng dữ liệu giả */}
-        <MovieList title="Top Rating" movies={topRatedMovies} />
+        <MovieList title="Top Rating" movies={topRatedListData} />
       </div>
     </div>
   );
