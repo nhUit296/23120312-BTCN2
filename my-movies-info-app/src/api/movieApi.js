@@ -16,13 +16,13 @@ export const movieApi = {
     );
   },
 
-  // --- THÊM HÀM SEARCH ---
-  // API: /movies/search?title=...&page=...&limit=...
-  searchMovies: (keyword, page = 1) => {
-    // Dùng encodeURIComponent để xử lý ký tự đặc biệt hoặc tiếng Việt trong tên phim
-    const encodedTitle = encodeURIComponent(keyword);
+  // CẬP NHẬT HÀM NÀY
+  searchMovies: (query, page = 1, limit = 6) => {
+    // Truyền đủ 3 tham số: title, page, limit
     return fetchClient.get(
-      `/movies/search?title=${encodedTitle}&page=${page}&limit=12`
+      `/movies/search?title=${encodeURIComponent(
+        query
+      )}&page=${page}&limit=${limit}`
     );
   },
 
