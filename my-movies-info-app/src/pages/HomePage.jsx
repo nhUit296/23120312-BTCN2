@@ -148,6 +148,8 @@ const HomePage = () => {
       {/* Movie Lists */}
       <div className="px-6 md:px-12 space-y-12">
         <MovieList title="Most Popular" movies={popularMovies} />
+
+        {/* TopRating sử dụng dữ liệu giả */}
         <MovieList title="Top Rating" movies={topRatedMovies} />
       </div>
     </div>
