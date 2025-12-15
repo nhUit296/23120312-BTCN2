@@ -32,4 +32,10 @@ export const movieApi = {
   getMovieDetail: (id) => {
     return fetchClient.get(`/movies/${id}`);
   },
+
+  // 3. Lấy chi tiết Người (Diễn viên/Đạo diễn)
+  // Endpoint: /people/{id}
+  getPersonDetail: (id) => {
+    return fetchClient.get(`/persons/${id}`);
+  },
 };

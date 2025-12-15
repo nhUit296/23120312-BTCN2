@@ -1,6 +1,6 @@
 // src/pages/MovieDetailPage.jsx
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { movieApi } from "../api/movieApi";
 import { Star, Clock, User, Award, Film } from "lucide-react";
 
@@ -129,10 +129,23 @@ const MovieDetailPage = () => {
                 </span>
                 <span className="text-xs text-gray-500">/10</span>
               </div>
-
+              {/* Giả sử movie.directors là mảng object [{id, name}, ...] */}
               <div className="border-l border-gray-600 pl-6">
                 <p className="text-gray-400 text-sm">Director</p>
-                <p className="font-semibold text-white text-lg">{directors}</p>
+                <div className="font-semibold text-white text-lg flex flex-wrap gap-2">
+                  {Array.isArray(movie.directors)
+                    ? movie.directors.map((d, index) => (
+                        <Link
+                          key={d.id || index}
+                          to={`/person/${d.id}`}
+                          className="hover:text-yellow-500 transition-colors cursor-pointer"
+                        >
+                          {d.name}
+                          {index < movie.directors.length - 1 ? ", " : ""}
+                        </Link>
+                      ))
+                    : "Unknown"}
+                </div>
               </div>
             </div>
 
@@ -162,43 +175,33 @@ const MovieDetailPage = () => {
               {description}
             </p>
           </section>
-
-          {/* Top Cast */}
-          <section>
-            <h2 className="text-2xl font-bold mb-6">Top Cast</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {actors.map((actor) => (
-                <div
-                  key={actor.id}
-                  className="flex items-center gap-4 bg-[#1e1e1e] p-3 rounded-lg hover:bg-[#252525] transition-colors group"
-                >
-                  {/* Ảnh diễn viên */}
-                  <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-700 flex-shrink-0 border border-gray-600 group-hover:border-yellow-500 transition-colors">
-                    <img
-                      src={getImgUrl(actor.image)}
-                      alt={actor.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  {/* Tên & Vai diễn */}
-                  <div>
-                    <p className="font-bold text-white text-base">
-                      {actor.name}
-                    </p>
-                    <p className="text-sm text-gray-400">
-                      {actor.character || actor.role || "Actor"}
-                    </p>
-                  </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {actors.map((actor) => (
+              // Bọc toàn bộ thẻ diễn viên bằng Link để click vào đâu cũng được
+              <Link
+                to={`/person/${actor.id}`}
+                key={actor.id}
+                className="flex items-center gap-4 bg-[#1e1e1e] p-3 rounded-lg hover:bg-[#252525] transition-colors group cursor-pointer"
+              >
+                <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-700 flex-shrink-0 border border-gray-600 group-hover:border-yellow-500 transition-colors">
+                  <img
+                    src={getImgUrl(actor.image)}
+                    alt={actor.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              ))}
-              {actors.length === 0 && (
-                <p className="text-gray-500 italic">
-                  No cast information available.
-                </p>
-              )}
-            </div>
-          </section>
+
+                <div>
+                  <p className="font-bold text-white text-base group-hover:text-yellow-500 transition-colors">
+                    {actor.name}
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    {actor.character || actor.role}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* CỘT PHẢI (NHỎ): Thông tin bổ sung */}
