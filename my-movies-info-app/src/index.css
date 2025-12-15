@@ -68,3 +68,8 @@
   --app-bg: #22252A;
 
 }
+
+.dark body {
+    /* Nền đen, chữ trắng -> Cả 2 bên rìa sẽ đen thùi lùi luôn */
+    @apply bg-[#22252A] text-white;
+}

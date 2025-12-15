@@ -47,5 +47,17 @@ export const movieApi = {
     );
   },
 
-  
+  // 2. Search Người (SỬA LẠI ĐÚNG ENDPOINT NÀY)
+  // Endpoint cũ sai: /persons/search?name=...
+  // Endpoint mới đúng: /persons?q=...
+  searchPeople: (query, page = 1, limit = 5) => {
+    return fetchClient.get(
+      `/persons?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`
+    );
+  },
+
+  // 3. Lấy chi tiết Người (Giữ nguyên)
+  getPersonDetail: (id) => {
+    return fetchClient.get(`/persons/${id}`);
+  },
 };

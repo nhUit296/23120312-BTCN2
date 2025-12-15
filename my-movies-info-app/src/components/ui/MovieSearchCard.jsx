@@ -1,12 +1,11 @@
 // src/components/ui/MovieSearchCard.jsx
 import React from "react";
-import { Star, Calendar, Layers } from "lucide-react"; // Đổi icon Clock thành Layers (Thể loại)
-import { useNavigate } from "react-router-dom"; // 1. Import hook
+import { useNavigate } from "react-router-dom";
 
 const MovieSearchCard = ({ movie }) => {
-  const navigate = useNavigate(); // 2. Khởi tạo
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    // Chuyển hướng đến trang chi tiết kèm ID phim
     navigate(`/movie/${movie.id}`);
   };
 
@@ -15,14 +14,11 @@ const MovieSearchCard = ({ movie }) => {
     movie.year ||
     (movie.release_date ? movie.release_date.split("-")[0] : "N/A");
 
-  // Dựa vào hình ảnh API: trường này tên là 'rate'
-  const rate = movie.rate || movie.vote_average || 0;
-
-  // Dựa vào hình ảnh API: có trường 'genres' là mảng chuỗi ["Comedy", "Action"...]
-  // Chúng ta sẽ nối chúng lại thành chuỗi: "Comedy, Action"
-  const genres = Array.isArray(movie.genres)
-    ? movie.genres.join(", ")
-    : movie.genres || "Movie";
+  // Kiểm tra kỹ: Phải là mảng VÀ có phần tử thì mới join
+  const genreText =
+    Array.isArray(movie.genres) && movie.genres.length > 0
+      ? movie.genres.join(", ")
+      : "";
 
   const getPosterURL = (path) => {
     if (!path) return "https://via.placeholder.com/300x450?text=No+Image";
@@ -33,28 +29,22 @@ const MovieSearchCard = ({ movie }) => {
 
   return (
     <div
-      className="bg-[#1a1a1a] overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer border border-[#D9D9D9] rounded-[5px]"
+      className="bg-[#1a1a1a] overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer border border-[#D9D9D9] rounded-[5px] flex flex-col h-full"
       onClick={handleClick}
     >
-      {/* 1. POSTER */}
-      <div className="relative aspect-[2/3] overflow-hidden">
+      <div className="relative aspect-[2/3] overflow-hidden flex-shrink-0">
         <img
-          src={getPosterURL(movie.image || movie.poster_path)}
+          src={getPosterURL(movie.image || movie.poster_path)} // Ưu tiên image từ API search
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
       </div>
 
-      {/* 2. INFO */}
-      <div className="p-3 text-black bg-white flex flex-col items-center text-center h-[100px]">
-        <h3 className="font-bold text-base truncate mb-1" title={title}>
-          {title} ({year})
+      <div className="p-3 text-black bg-white flex flex-col items-center text-center justify-center h-auto min-h-[100px] flex-grow">
+        <h3 className="font-bold text-base mb-1 leading-tight">
+          {title} <span className="font-normal text-sm">({year})</span>
         </h3>
-
-        {/* Thể loại */}
-        <div className="text-xs text-gray-400 truncate" title={genres}>
-          [{genres}]
-        </div>
+        <div className="text-xs text-gray-500 leading-snug">[{genreText}]</div>
       </div>
     </div>
   );
