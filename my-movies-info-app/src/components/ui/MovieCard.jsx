@@ -27,18 +27,24 @@ const MovieCard = ({ movie }) => {
 
   return (
     // DIV GIỮ CHỖ - Giữ vị trí trong layout, không bao giờ thay đổi
-    <div
-      className="relative group z-[1] group-hover:z-[100]"
-      onClick={handleClick}
-    >
+    <div className="relative group w-[300px] h-[250px]" onClick={handleClick}>
       {/* CONTAINER ẢNH + INFO
           KEY POINT: Dùng left-1/2 -translate-x-1/2 để căn giữa theo chiều ngang
           - Trước hover: relative, kích thước 200x300
           - Sau hover: absolute (nổi lên), kích thước 250x375, dịch lên trên
       */}
-      <div className="relative w-[300px] h-[250px] transition-all duration-300 ease-in-out group-hover:absolute group-hover:left-1/2 group-hover:top-[-120px] group-hover:-translate-x-1/2 group-hover:-translate-y-6 group-hover:w-[450px] group-hover:h-[350px] group-hover:z-50 rounded-[5px]">
-        {/* PHẦN ẢNH */}
-        <div className="w-full h-full rounded-[5px] shadow-lg bg-[#181818] group-hover:rounded-b-none group-hover:shadow-2xl">
+      {/* DIV HIỆU ỨNG */}
+      <div
+        className="
+          absolute inset-0
+          transition-transform duration-300 ease-in-out
+          group-hover:scale-125
+          group-hover:-translate-y-16
+          group-hover:z-50
+        "
+      >
+        {/* ẢNH */}
+        <div className="w-full h-full rounded-[5px] shadow-lg bg-[#181818] overflow-hidden">
           <img
             src={getPosterURL(imagePath)}
             alt={title}
@@ -46,10 +52,18 @@ const MovieCard = ({ movie }) => {
           />
         </div>
 
-        {/* PHẦN THÔNG TIN - Xuất hiện dưới ảnh khi hover */}
-        <div className="absolute top-full left-0 w-full bg-[#181818] p-4 rounded-b-lg shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-          {/* Tên phim */}
-          <h3 className="text-white text-base font-bold line-clamp-2 mb-2">
+        {/* INFO */}
+        <div
+          className="
+            absolute top-full left-0 w-full
+            bg-[#181818] p-4
+            rounded-b-lg shadow-2xl
+            opacity-0 translate-y-2
+            group-hover:opacity-100 group-hover:translate-y-0
+            transition-all duration-300
+          "
+        >
+          <h3 className="text-white text-sm font-bold line-clamp-2">
             {title} ({year})
           </h3>
         </div>
