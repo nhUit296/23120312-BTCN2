@@ -78,7 +78,7 @@ const FavoritePage = () => {
               ))}
             </div>
 
-            {/* --- THANH PHÂN TRANG (Chỉ hiện khi có hơn 1 trang) --- */}
+            {/* --- THANH PHÂN TRANG (Chỉ hiện khi có hơn 1 trang ...) --- */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center mt-10 gap-4">
                 <button
